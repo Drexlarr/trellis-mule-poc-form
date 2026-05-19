@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juniper Referral Submission</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Juniper Referral Submission</h1>
+            <p class="subtitle">Submit a referral to the Juniper Experience API</p>
+        </header>
+
+        <div id="cors-banner" class="banner" style="display:none;">
+            <span>CORS policy must be enabled on the Experience API in Anypoint API Manager for this form to work.</span>
+            <button class="banner-close" onclick="this.parentElement.style.display='none'">&times;</button>
+        </div>
+
+        <form id="referralForm" novalidate>
+            <fieldset>
+                <legend>Patient Information</legend>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="patientFirstName">First Name <span class="required">*</span></label>
+                        <input type="text" id="patientFirstName" name="patientFirstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="patientLastName">Last Name <span class="required">*</span></label>
+                        <input type="text" id="patientLastName" name="patientLastName" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="patientDob">Date of Birth <span class="required">*</span></label>
+                        <input type="date" id="patientDob" name="patientDob" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="patientEmail">Email <span class="required">*</span></label>
+                        <input type="email" id="patientEmail" name="patientEmail" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="patientPhone">Phone</label>
+                    <input type="tel" id="patientPhone" name="patientPhone" placeholder="+1-555-019-8372">
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Referral Details</legend>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="mrn">MRN <span class="required">*</span></label>
+                        <input type="text" id="mrn" name="mrn" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="referralSender">Referral Sender <span class="required">*</span></label>
+                        <input type="text" id="referralSender" name="referralSender" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="diagnosisName">Diagnosis Name <span class="required">*</span></label>
+                        <input type="text" id="diagnosisName" name="diagnosisName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="icd10Code">ICD-10 Code <span class="required">*</span></label>
+                        <input type="text" id="icd10Code" name="icd10Code" placeholder="e.g. M25.561" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="referringProvider">Referring Provider <span class="required">*</span></label>
+                    <input type="text" id="referringProvider" name="referringProvider" required>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Insurance</legend>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="payerName">Payer Name <span class="required">*</span></label>
+                        <input type="text" id="payerName" name="payerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="memberId">Member ID <span class="required">*</span></label>
+                        <input type="text" id="memberId" name="memberId" required>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Notes</legend>
+                <div class="form-group">
+                    <label for="reasonForReferral">Reason for Referral</label>
+                    <textarea id="reasonForReferral" name="reasonForReferral" rows="3" placeholder="Optional — clinical reason for the referral"></textarea>
+                </div>
+            </fieldset>
+
+            <div class="form-actions">
+                <button type="submit" id="submitBtn" class="btn-primary">Submit Referral</button>
+                <button type="reset" class="btn-secondary">Clear Form</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
