@@ -58,11 +58,23 @@
         return valid;
     }
 
+    function formatDob(value) {
+        var parts = value.split('/');
+        if (parts.length === 3) {
+            var year = parts[2];
+            var month = String(parts[0]).padStart(2, '0');
+            var day = String(parts[1]).padStart(2, '0');
+            return year + '-' + month + '-' + day;
+        }
+        return value;
+    }
+
     function buildPayload() {
+        var dobRaw = document.getElementById('patientDob').value.trim();
         var payload = {
             patientFirstName: document.getElementById('patientFirstName').value.trim(),
             patientLastName: document.getElementById('patientLastName').value.trim(),
-            patientDob: (function () { var v = document.getElementById('patientDob').value.trim(); var p = v.split('/'); if (p.length === 3) { return p[2] + '-' + String(p[0]).padStart(2, '0') + '-' + String(p[1]).padStart(2, '0'); } return v; })(),
+            patientDob: formatDob(dobRaw),
             patientEmail: document.getElementById('patientEmail').value.trim(),
             mrn: document.getElementById('mrn').value.trim(),
             referralSender: document.getElementById('referralSender').value.trim(),
