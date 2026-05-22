@@ -62,7 +62,7 @@
         var payload = {
             patientFirstName: document.getElementById('patientFirstName').value.trim(),
             patientLastName: document.getElementById('patientLastName').value.trim(),
-            patientDob: document.getElementById('patientDob').value,
+            patientDob: (function () { var v = document.getElementById('patientDob').value; var p = v.split('/'); return p.length === 3 ? p[2] + '-' + p[0] + '-' + p[1] : v; })(),
             patientEmail: document.getElementById('patientEmail').value.trim(),
             mrn: document.getElementById('mrn').value.trim(),
             referralSender: document.getElementById('referralSender').value.trim(),
