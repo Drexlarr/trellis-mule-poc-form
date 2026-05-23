@@ -41,12 +41,47 @@
         }, 250);
     }
 
+    function formatDobDigits(digits) {
+        if (digits.length <= 2) {
+            return digits;
+        }
+        if (digits.length <= 4) {
+            return digits.slice(0, 2) + '-' + digits.slice(2);
+        }
+        return digits.slice(0, 2) + '-' + digits.slice(2, 4) + '-' + digits.slice(4);
+    }
+
+    function handleDobInput(e) {
+        var input = e.target;
+        var digits = input.value.replace(/\D/g, '').slice(0, 8);
+        input.value = formatDobDigits(digits);
+    }
+
+    function isValidDob(value) {
+        if (!/^\d{2}-\d{2}-\d{4}$/.test(value)) {
+            return false;
+        }
+
+        var parts = value.split('-');
+        var month = parseInt(parts[0], 10);
+        var day = parseInt(parts[1], 10);
+        var year = parseInt(parts[2], 10);
+        var date = new Date(year, month - 1, day);
+
+        return date.getFullYear() === year &&
+            date.getMonth() === month - 1 &&
+            date.getDate() === day;
+    }
+
     function validateForm() {
         var valid = true;
         var requiredFields = form.querySelectorAll('[required]');
         requiredFields.forEach(function (field) {
             field.classList.remove('invalid');
             if (!field.value.trim()) {
+                field.classList.add('invalid');
+                valid = false;
+            } else if (field.id === 'patientDob' && !isValidDob(field.value.trim())) {
                 field.classList.add('invalid');
                 valid = false;
             }
@@ -58,15 +93,9 @@
         return valid;
     }
 
-    function formatDob(value) {
-        var parts = value.split('/');
-        if (parts.length === 3) {
-            var year = parts[2];
-            var month = String(parts[0]).padStart(2, '0');
-            var day = String(parts[1]).padStart(2, '0');
-            return year + '-' + month + '-' + day;
-        }
-        return value;
+    function formatDobForApi(value) {
+        var parts = value.split('-');
+        return parts[2] + '-' + parts[0] + '-' + parts[1];
     }
 
     function buildPayload() {
@@ -74,7 +103,7 @@
         var payload = {
             patientFirstName: document.getElementById('patientFirstName').value.trim(),
             patientLastName: document.getElementById('patientLastName').value.trim(),
-            patientDob: formatDob(dobRaw),
+            patientDob: formatDobForApi(dobRaw),
             patientEmail: document.getElementById('patientEmail').value.trim(),
             mrn: document.getElementById('mrn').value.trim(),
             referralSender: document.getElementById('referralSender').value.trim(),
@@ -133,7 +162,11 @@
         }
 
         if (!validateForm()) {
-            showToast('error', 'Validation Error', '<p>Please fill in all required fields.</p>', 5000);
+            var dobField = document.getElementById('patientDob');
+            var message = dobField.classList.contains('invalid') && dobField.value.trim()
+                ? '<p>Please enter a valid date of birth in MM-DD-YYYY format.</p>'
+                : '<p>Please fill in all required fields.</p>';
+            showToast('error', 'Validation Error', message, 5000);
             return;
         }
 
@@ -177,6 +210,8 @@
             submitBtn.textContent = 'Submit Referral';
         }
     }
+
+    document.getElementById('patientDob').addEventListener('input', handleDobInput);
 
     form.addEventListener('submit', handleSubmit);
 })();
